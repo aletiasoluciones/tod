@@ -11,6 +11,9 @@ RUN yum install -y --setopt=tsflags=nodocs epel-release yum-utils http://rpms.re
 COPY css_content/ /var/www/html/css
 COPY web_app /var/www/html/
 COPY run-apache.sh /
-EXPOSE 80
+RUN chgrp -R 0 /var/www /etc/httpd /run/httpd /var/log/httpd && \
+    chmod -R g=u /var/www /etc/httpd /run/httpd /var/log/httpd && \
+    sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
+EXPOSE 8080
 
 CMD /run-apache.sh
